@@ -1,0 +1,59 @@
+---
+##########################
+# docker
+
+docker_version: "5:24.0.9"
+{% raw -%}
+docker_user: "{{ operator_user }}"
+{%- endraw %}
+
+##########################
+# operator
+
+operator_user: dragon
+
+# yamllint disable rule:line-length
+operator_public_key: FIXME
+# yamllint enable rule:line-length
+
+{% raw -%}
+operator_authorized_keys:
+  - "{{ operator_public_key }}"
+{%- endraw %}
+
+##########################
+# resolvconf
+
+# NOTE: As it is not trivial to comfortably query several entries for a parameter
+#       with Cookiecutter, only one DNS server is added here. At least one additional
+#       DNS server should be added.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/commons/resolvconf
+resolvconf_nameserver:
+  - {{cookiecutter.name_server}}
+resolvconf_search: {{cookiecutter.domain}}
+
+##########################
+# hosts
+
+hosts_additional_entries:
+  {{cookiecutter.fqdn_internal}}: {{cookiecutter.ip_internal}}
+{%- if cookiecutter.fqdn_external != cookiecutter.fqdn_internal %}
+  {{cookiecutter.fqdn_external}}: {{cookiecutter.ip_external}}
+{%- endif %}
+
+##########################
+# chrony
+
+# NOTE: As it is not trivial to comfortably query several entries for a parameter
+#       with Cookiecutter, only one NTP server is added here. At least one additional
+#       NTP server should be added.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/services/chrony
+chrony_servers:
+  - {{cookiecutter.ntp_server}}
+{%- if cookiecutter.with_ceph|int %}
+
+##########################
+# ceph
+
+ceph_cluster_fsid:
+{%- endif %}

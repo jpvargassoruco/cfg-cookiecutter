@@ -1,0 +1,39 @@
+---
+##########################
+# generic
+
+fsid:
+
+##########################
+# network
+
+public_network: {{cookiecutter.ceph_network}}
+cluster_network: {{cookiecutter.ceph_network}}
+
+##########################
+# custom
+
+ceph_conf_overrides:
+  global:
+    auth allow insecure global id reclaim: false
+    osd pool default size: 3
+  mon:
+    mon allow pool delete: true
+  "client.rgw.{% raw %}{{ hostvars[inventory_hostname]['ansible_hostname'] }}{% endraw %}.rgw0":
+    "rgw content length compat": "true"
+    "rgw enable apis": "swift, s3, admin"
+    "rgw keystone accepted admin roles": "admin"
+    "rgw keystone accepted roles": "member, admin"
+    "rgw keystone admin domain": "default"
+    "rgw keystone admin password": "{% raw %}{{ ceph_rgw_keystone_password }}{% endraw %}"
+    "rgw keystone admin project": "service"
+    "rgw keystone admin tenant": "service"
+    "rgw keystone admin user": "ceph_rgw"
+    "rgw keystone api version": "3"
+    "rgw keystone implicit tenants": "true"
+    "rgw keystone url": "http://{{cookiecutter.fqdn_internal}}:5000"
+    "rgw keystone verify ssl": "false"
+    "rgw s3 auth use keystone": "true"
+    "rgw swift account in url": "true"
+    "rgw swift versioning enabled": "true"
+    "rgw verify ssl": "false"

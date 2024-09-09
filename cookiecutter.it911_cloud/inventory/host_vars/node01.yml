@@ -1,0 +1,83 @@
+# NOTE: This file must be edited before using the configuration repository.
+#       This file serves as a template for a node. There must be a separate
+#       host vars file for each node in the cluster. The IP addresses, interface
+#       names etc. are examples. This file (node01.yml) is removed and should
+#       not be present in the configuration repository.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/configuration-repository#step-4-post-processing-of-the-generated-configuration
+---
+##########################################################
+# ansible
+
+# NOTE: Address where the node can be reached via SSH. If DHCP is used after the
+#       initial provisioning to assign an IP address to the nodes, the address
+#       assigned via DHCP is initially used here and later adapted to the static
+#       IP address.
+ansible_host: 192.168.16.10
+
+##########################################################
+# generic
+
+internal_interface: eno1
+
+# NOTE: The address of the internal interface.
+internal_address: 192.168.16.10
+
+##########################################################
+# netdata
+
+netdata_host_type: client
+
+# NOTE: Uncomment this when this node should be a Netdata server. The previous line
+#       with "netdata_host_type: client" is then commented
+# netdata_host_type: server
+
+##########################################################
+# network
+
+# NOTE: This is the initial management interface. Further interfaces can be added.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/network
+network_ethernets:
+  eno1:
+    addresses:
+      - "192.168.16.10/20"
+    gateway4: "192.168.16.1"
+    mtu: 1500
+
+##########################################################
+# kolla
+
+network_interface: eno1
+
+# NOTE: These parameters are only commented out if necessary.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/openstack/#network-interfaces
+# api_interface:
+# bifrost_network_interface:
+# dns_interface:
+# kolla_external_vip_interface:
+# migration_interface:
+# neutron_external_interface:
+# octavia_network_interface:
+# storage_interface:
+# tunnel_interface:
+
+##########################################################
+# ceph
+
+# NOTE: Uncomment this when this node is a part of the Ceph cluster.
+# monitor_address: 192.168.16.10
+# radosgw_address: 192.168.16.10
+
+# NOTE: Uncomment this when this node should be an OSD node. The OSD devices
+#       used for Ceph must be modified.
+# DOCS: https://osism.tech/docs/guides/configuration-guide/ceph#lvm-devices
+# ceph_osd_devices:
+#   sdb:
+#   sdc:
+#   sdd:
+#   sde:
+
+##########################################################
+# kubernetes
+
+# NOTE: The value of internal_interface is used by default.
+# k3s_interface:

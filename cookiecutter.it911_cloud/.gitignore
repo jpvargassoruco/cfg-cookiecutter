@@ -1,0 +1,10 @@
+*.swp
+.venv
+venv
+Pipfile.lock
+id_rsa.operator
+ironic-agent.initramfs
+ironic-agent.kernel
+roles
+secrets
+secure.yml
